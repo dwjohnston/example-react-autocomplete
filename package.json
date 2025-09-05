@@ -1,5 +1,5 @@
 {
-  "name": "an-example-react-package-built-with-nextjs-tooling",
+  "name": "example-react-autocomplete",
   "author": {
     "name": "David Johnston",
     "email": "david@blacksheepcode.com",
@@ -7,9 +7,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dwjohnston/ultimate-react-package-template.git"
+    "url": "git+https://github.com/dwjohnston/example-react-autocomplete.git"
   },
-  "version": "0.8.0",
+  "version": "0.1.0",
   "private": false,
   "publishConfig": {
     "access": "public"
