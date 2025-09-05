@@ -1,0 +1,88 @@
+.autocomplete {
+  position: relative;
+  width: 300px;
+  font-family: inherit;
+
+
+  /* Light mode variables (default) */
+  --main-bg-color: white;
+  --main-text-color: black;
+  --highlight-color: grey;
+  --border-color: grey;
+
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  .autocomplete {
+    --main-bg-color: #2d2d2d;
+    --main-text-color: #e0e0e0;
+    --highlight-color: #4a4a4a;
+    --border-color: #555;
+  }
+}
+
+.autocomplete-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  outline: none;
+}
+
+.autocomplete-loading,
+.autocomplete-searching,
+.autocomplete-no-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--main-bg-color);
+  color: var(--main-text-color);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  padding: 8px 12px;
+  z-index: 11;
+  font-size: 0.95em;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--main-bg-color);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  background: var(--main-bg-color);
+  transition: background 0.1s;
+}
+
+.autocomplete-item.selected,
+.autocomplete-item:hover {
+  background: var(--highlight-color);
+}
+
+.autocomplete-pagination {
+  margin-top: 4px;
+  text-align: right;
+}
+
+.autocomplete-pagination button {
+  margin: 0 2px;
+  padding: 2px 8px;
+  font-size: 0.95em;
+}

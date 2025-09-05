@@ -1,8 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, waitFor, within } from "@storybook/test";
-
-import { MyComponent } from './MyComponent';
 import { Autocomplete, AutocompleteProps } from './Autocomplete';
 
 
