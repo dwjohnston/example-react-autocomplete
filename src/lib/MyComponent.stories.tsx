@@ -16,6 +16,9 @@ export const Main: Story = {
     args: {
         foo: "Hello world!"
     },
+    parameters: {
+        
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         const myComponent = await canvas.findByTestId("my-component");
