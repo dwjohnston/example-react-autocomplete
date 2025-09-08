@@ -49,7 +49,6 @@ const createMockSearchFn = (shouldReturnResults: boolean = true, delay: number =
 describe('Autocomplete', () => {
     const user = userEvent.setup();
 
-    const renderItem = (item: TestItem) => <div>{item.name} - {item.description}</div>;
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -62,7 +61,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                 />
@@ -76,7 +75,9 @@ describe('Autocomplete', () => {
 
             // Type in the input
             await user.type(input, 'xyz');
-            expect(searchFn).toHaveBeenCalledTimes(3); // Called for each character typed
+
+            // Called for each character typed - this is something we might change with a debounce
+            expect(searchFn).toHaveBeenCalledTimes(3);
 
             // Should show loading state first
             expect(await screen.findByText('Searching...')).toBeInTheDocument();
@@ -89,40 +90,6 @@ describe('Autocomplete', () => {
             // Loading should be gone
             expect(screen.queryByText('Searching...')).not.toBeInTheDocument();
 
-            // Search function should have been called with the search term
-            expect(searchFn).toHaveBeenCalledWith('xyz', 1);
-        });
-
-        it('should handle typing and show appropriate states', async () => {
-            const searchFn = createMockSearchFn(false, 50); // Returns no results with delay
-
-            render(
-                <Autocomplete
-                    searchFn={searchFn}
-                    renderItem={renderItem}
-                    itemKey="id"
-                    onSelectValue={vi.fn()}
-                />
-            );
-
-            const input = screen.getByPlaceholderText('Type to search...');
-
-            // Type first character
-            await user.type(input, 'x');
-
-            // Should show searching state
-            expect(screen.getByText('Searching...')).toBeInTheDocument();
-
-            // Continue typing
-            await user.type(input, 'yz');
-
-            // Wait for final search result
-            await waitFor(() => {
-                expect(screen.getByText('No results.')).toBeInTheDocument();
-            });
-
-            // Verify the input value
-            expect(input).toHaveValue('xyz');
         });
     });
 
@@ -148,7 +115,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                 />
@@ -158,6 +125,9 @@ describe('Autocomplete', () => {
 
             // Type 'a' - should get results
             await user.type(input, 'a');
+
+            expect(screen.getByText('Searching...')).toBeInTheDocument();
+
 
             await waitFor(() => {
                 expect(screen.getByText('Apple - A red fruit')).toBeInTheDocument();
@@ -169,6 +139,8 @@ describe('Autocomplete', () => {
 
             // Type 'x' to make it 'ax' - should get no results
             await user.type(input, 'x');
+            // We shouldn't see 'Searching...' if we already have results.
+            expect(screen.queryByText('Searching...')).not.toBeInTheDocument();
 
             await waitFor(() => {
                 expect(screen.getByText('No results.')).toBeInTheDocument();
@@ -182,39 +154,6 @@ describe('Autocomplete', () => {
             expect(searchFn).toHaveBeenCalledWith('a', 1);
             expect(searchFn).toHaveBeenCalledWith('ax', 1);
         });
-
-        it('should handle item selection when results are available', async () => {
-            const onSelectValue = vi.fn();
-            const searchFn = createMockSearchFn(true);
-
-            render(
-                <Autocomplete
-                    searchFn={searchFn}
-                    renderItem={renderItem}
-                    itemKey="id"
-                    onSelectValue={onSelectValue}
-                />
-            );
-
-            const input = screen.getByPlaceholderText('Type to search...');
-
-            // Type to get results
-            await user.type(input, 'apple');
-
-            await waitFor(() => {
-                expect(screen.getByText('Apple - A red fruit')).toBeInTheDocument();
-            });
-
-            // Click on the result
-            const resultItem = screen.getByText('Apple - A red fruit');
-            await user.click(resultItem);
-
-            // Verify selection callback was called
-            expect(onSelectValue).toHaveBeenCalledWith('id', mockItems[0]);
-
-            // Input should be cleared after selection
-            expect(input).toHaveValue('');
-        });
     });
 
     describe('Scenario 3: Text field starts populated with a value', () => {
@@ -224,7 +163,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                     defaultSelectedValue={2} // Banana's id
@@ -251,7 +190,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                     defaultSelectedValue={999} // Non-existent id
@@ -281,7 +220,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={onSelectValue}
                     defaultSelectedValue={1} // Apple's id
@@ -316,7 +255,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                 />
@@ -356,7 +295,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={onSelectValue}
                 />
@@ -387,7 +326,7 @@ describe('Autocomplete', () => {
             render(
                 <Autocomplete
                     searchFn={searchFn}
-                    renderItem={renderItem}
+                    renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
                 />

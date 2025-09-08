@@ -90,8 +90,8 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
     // setItems([]); 
   };
 
-  const showNoResults = !items.length && !isSearching && searchTerm.length > 0;
-  const showSearching = isSearching;
+  const showNoResults = items.length === 0 && !isSearching && searchTerm.length > 0;
+  const showSearching = isSearching && items.length === 0;
 
   return (
     <div className="autocomplete">
