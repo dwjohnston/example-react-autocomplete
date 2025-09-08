@@ -67,5 +67,8 @@
     "storybook": "^8.6.12",
     "typescript": "^5",
     "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.87.1"
   }
 }
