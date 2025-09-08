@@ -146,7 +146,7 @@ export const FocusedWith10Options: Story = {
         isLoading: false,
         availableOptions: tenTodos,
     },
-    play: async ({ canvasElement }) => {
+    play: async ({ canvasElement, },) => {
         const canvas = within(canvasElement);
         const input = canvas.getByRole('textbox');
 
