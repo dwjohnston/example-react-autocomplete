@@ -27,39 +27,13 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
   defaultSelectedValue,
   onSelectValue,
 }: AutocompleteProps<T, TKey>) {
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [items, setItems] = useState<T[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [pageMeta, setPageMeta] = useState<AutocompletePayload<T>["pageMeta"]>({
-    totalResults: 0,
-    pageNumber: 1,
-    resultsPerPage: 10,
-  });
+
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    let active = true;
-    setLoading(true);
-    setIsSearching(false);
-    searchFn(searchTerm, pageMeta.pageNumber)
-      .then((result) => {
-        if (active) {
-          setItems(result.items);
-          setPageMeta(result.pageMeta);
-          setLoading(false);
-          setHighlightedIndex(null);
-        }
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-    // eslint-disable-next-line
-  }, [searchTerm, pageMeta.pageNumber, searchFn]);
 
   // Optionally pre-select the default value
   useEffect(() => {
@@ -70,21 +44,25 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
     if (foundIndex >= 0) setHighlightedIndex(foundIndex);
   }, [items, defaultSelectedValue, itemKey]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-    setPageMeta((meta) => ({ ...meta, pageNumber: 1 }));
 
-    // Show searching state when user types and has no current results
-    if (newSearchTerm && items.length === 0) {
+    try {
       setIsSearching(true);
+      setSearchTerm(newSearchTerm);
+      const result = await searchFn(newSearchTerm, 1);
+      setItems(result.items);
+    } finally {
+      setIsSearching(false);
     }
   };
 
   const handleItemSelect = (item: T, index: number) => {
     setHighlightedIndex(index);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
     onSelectValue?.(itemKey, item);
-    setSearchTerm('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,26 +90,20 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
     // setItems([]); 
   };
 
-  const goToPage = (page: number) => {
-    setPageMeta((meta) => ({ ...meta, pageNumber: page }));
-  };
-
-  const showNoResults = !loading && !items.length && !isSearching && searchTerm.length > 0;
-  const showSearching = isSearching && !loading;
+  const showNoResults = !items.length && !isSearching && searchTerm.length > 0;
+  const showSearching = isSearching;
 
   return (
     <div className="autocomplete">
       <input
         ref={inputRef}
         type="text"
-        value={searchTerm}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         placeholder="Type to search..."
         className="autocomplete-input"
       />
-      {loading && <div className="autocomplete-loading">Searching...</div>}
       {showSearching && <div className="autocomplete-searching">Searching...</div>}
       {showNoResults && <div className="autocomplete-no-results">No results.</div>}
       {items.length > 0 && searchTerm.length > 0 && (
@@ -149,14 +121,7 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
           ))}
         </ul>
       )}
-      <div className="autocomplete-pagination">
-        {pageMeta.pageNumber > 1 && (
-          <button onClick={() => goToPage(pageMeta.pageNumber - 1)}>Prev</button>
-        )}
-        {pageMeta.pageNumber * pageMeta.resultsPerPage < pageMeta.totalResults && (
-          <button onClick={() => goToPage(pageMeta.pageNumber + 1)}>Next</button>
-        )}
-      </div>
+
     </div>
   );
 }
