@@ -4,7 +4,7 @@ import { Autocomplete } from "./Autocomplete";
 import { userEvent } from "@storybook/test";
 
 describe(Autocomplete, () => {
-    it("Displays the values when the input is focused and their are results", async () => {
+    it("Displays the values when the input is focused, has text, and there are results", async () => {
         render(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
@@ -25,7 +25,7 @@ describe(Autocomplete, () => {
             expect(screen.getByText("Bar")).toBeInTheDocument();
         })
     })
-    it("Displays the no results message when the input is focused and their are not results", async () => {
+    it("Displays the no results message when the input is focused, has text, and there are not results", async () => {
         render(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
