@@ -14,7 +14,6 @@ describe(SpecialButton2, () => {
 
         render(<SpecialButton2 onClick={mockAsyncOperation} />);
 
-
         expect(mockAsyncOperation).not.toHaveBeenCalled();
 
         const button = screen.getByRole("button");
