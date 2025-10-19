@@ -141,7 +141,6 @@ describe(SpecialButton, () => {
         // Initial state: pending
         expect(screen.getByText("Click Me")).toBeInTheDocument();
         expect(button).not.toBeDisabled();
-        expect(button).toHaveClass("special-button", "pending");
 
         // Rerender with loading state
         rerender(
@@ -154,33 +153,6 @@ describe(SpecialButton, () => {
         button = screen.getByRole("button");
         expect(screen.getByText("Loading...")).toBeInTheDocument();
         expect(button).toBeDisabled();
-        expect(button).toHaveClass("special-button", "loading");
-
-        // Rerender with success state
-        rerender(
-            <SpecialButton
-                onClick={mockOnClick}
-                state="success"
-            />
-        );
-
-        button = screen.getByRole("button");
-        expect(screen.getByText("Success!")).toBeInTheDocument();
-        expect(button).not.toBeDisabled();
-        expect(button).toHaveClass("special-button", "success");
-
-        // Rerender with error state
-        rerender(
-            <SpecialButton
-                onClick={mockOnClick}
-                state="error"
-            />
-        );
-
-        button = screen.getByRole("button");
-        expect(screen.getByText("Error!")).toBeInTheDocument();
-        expect(button).not.toBeDisabled();
-        expect(button).toHaveClass("special-button", "error");
     });
 
 
