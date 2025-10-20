@@ -25,7 +25,7 @@ describe(SpecialButton2, () => {
         // Click the button to start async operation
         userEvent.click(button);
 
-        // Should immediately transition to loading state
+        // Should transition to loading state
         expect(await screen.findByText("Loading...")).toBeInTheDocument();
         expect(button).toBeDisabled();
 
