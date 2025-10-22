@@ -91,6 +91,20 @@ export const Main: Story = {
 
 }
 
+export function Interactive() {
+    return (
+        <div>
+            <Autocomplete
+                searchFn={searchFn}
+                renderItem={(item) => <div>{item.name}</div>}
+                itemKey="id"
+
+            />
+        </div>
+    );
+}
+
+
 export const TestUserSearchesWithNoResults: Story = {
     args: {
         searchFn,
