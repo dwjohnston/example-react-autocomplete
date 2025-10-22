@@ -61,28 +61,17 @@ async function searchFn(searchTerm: string, pageNumber: number) {
 }
 
 export function Interactive() {
-    const [searchValue, setSearchValue] = React.useState("");
+
+    // Just for storybook display purposes
     const [selectedValue, setSelectedValue] = React.useState<Todo | null>(null);
+
+
+    const [searchValue, setSearchValue] = React.useState("");
     const [availableOptions, setAvailableOptions] = React.useState<Array<Todo>>([]);
     const [isLoading, setIsLoading] = React.useState(false);
 
-    // Simulate search
     React.useEffect(() => {
-        let active = true;
-        if (searchValue.length < 3) {
-            setAvailableOptions([]);
-            return;
-        }
-        setIsLoading(true);
-        searchFn(searchValue, 1).then((result) => {
-            if (active) {
-                setAvailableOptions(result.items);
-                setIsLoading(false);
-            }
-        });
-        return () => {
-            active = false;
-        };
+
     }, [searchValue]);
 
     return <div>
@@ -91,14 +80,33 @@ export function Interactive() {
         </pre>
         <Autocomplete
             searchValue={searchValue}
-            onChangeSearchValue={(str: string) => { setSearchValue(str) }}
-            selectedValue={selectedValue}
-            onSelectValue={(value: Todo) => { setSelectedValue(value); setSearchValue(value.name); setAvailableOptions([]); }}
-            renderItem={(v: Todo) => { return <div>{v.name}</div> }}
+            onChangeSearchValue={async (str) => {
+                setSearchValue(str);
+                if (searchValue.length < 3) {
+                    setAvailableOptions([]);
+                    return;
+                }
+                setIsLoading(true);
+                try {
+                    const result = await searchFn(searchValue, 1);
+                }
+                catch {
+                    setAvailableOptions([]);
+                }
+                finally {
+                    setIsLoading(false);
+                }
+            }}
+            onSelectValue={(value) => {
+                setSelectedValue(value);
+                setSearchValue(value.name);
+                setAvailableOptions([]);
+            }}
+            renderItem={(v) => { return <div>{v.name}</div> }}
             isLoading={isLoading}
             availableOptions={availableOptions}
         ></Autocomplete>
-    </div>
+    </div >
 }
 
 export const Main: Story = {
@@ -108,7 +116,6 @@ export const Main: Story = {
         },
         searchValue: "",
         onChangeSearchValue: (str: string) => { console.log(str) },
-        selectedValue: null,
         onSelectValue: (value: Todo) => { console.log(value) },
         isLoading: false,
         availableOptions: [],
@@ -141,7 +148,6 @@ export const FocusedWith10Options: Story = {
         renderItem: (v: Todo) => <div>{v.name}</div>,
         searchValue: "test",
         onChangeSearchValue: () => { },
-        selectedValue: null,
         onSelectValue: () => { },
         isLoading: false,
         availableOptions: tenTodos,
@@ -171,7 +177,6 @@ export const FocusedWith0Options: Story = {
         renderItem: (v: Todo) => <div>{v.name}</div>,
         searchValue: "xyz",
         onChangeSearchValue: () => { },
-        selectedValue: null,
         onSelectValue: () => { },
         isLoading: false,
         availableOptions: [],
@@ -200,7 +205,6 @@ export const FocusedLoadingWith0Options: Story = {
         renderItem: (v: Todo) => <div>{v.name}</div>,
         searchValue: "foo",
         onChangeSearchValue: () => { },
-        selectedValue: null,
         onSelectValue: () => { },
         isLoading: true,
         availableOptions: [],
@@ -232,7 +236,6 @@ export const FocusedLoadingWith10Options: Story = {
         renderItem: (v: Todo) => <div>{v.name}</div>,
         searchValue: "foo",
         onChangeSearchValue: () => { },
-        selectedValue: null,
         onSelectValue: () => { },
         isLoading: true,
         availableOptions: tenTodos,

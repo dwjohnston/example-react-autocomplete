@@ -2,7 +2,6 @@ import React from 'react';
 import './Autocomplete.css';
 
 export type AutocompleteProps<T> = {
-
   searchValue: string;
   onChangeSearchValue: (str: string) => void;
 
@@ -11,7 +10,6 @@ export type AutocompleteProps<T> = {
 
   isLoading: boolean;
   availableOptions: Array<T>;
-
 }
 
 
