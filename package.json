@@ -34,7 +34,8 @@
     "test-storybook": "test-storybook",
     "changeset": "changeset",
     "release": "changeset publish",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": ">=16.0.0",

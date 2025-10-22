@@ -8,7 +8,6 @@ describe(Autocomplete, () => {
         const renderResult = render(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
-            selectedValue={null}
             onSelectValue={vi.fn()}
             renderItem={(v) => <div>{v.name}</div>}
             isLoading={false}
@@ -32,7 +31,6 @@ describe(Autocomplete, () => {
         render(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
-            selectedValue={null}
             onSelectValue={vi.fn()}
             renderItem={(v) => <div>{v.name}</div>}
             isLoading={false}
@@ -53,7 +51,6 @@ describe(Autocomplete, () => {
         const renderResult = render(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
-            selectedValue={null}
             onSelectValue={vi.fn()}
             renderItem={(v) => <div>{v.name}</div>}
             isLoading={true}
@@ -72,7 +69,6 @@ describe(Autocomplete, () => {
         renderResult.rerender(<Autocomplete
             searchValue="123"
             onChangeSearchValue={vi.fn()}
-            selectedValue={null}
             onSelectValue={vi.fn()}
             renderItem={(v) => <div>{v.name}</div>}
             isLoading={false}

@@ -6,9 +6,7 @@ export type AutocompleteProps<T> = {
   searchValue: string;
   onChangeSearchValue: (str: string) => void;
 
-  selectedValue: T | null;
   onSelectValue: (value: T) => void;
-
   renderItem: (value: T) => React.ReactNode;
 
   isLoading: boolean;
@@ -21,7 +19,6 @@ export function Autocomplete<T>(props: AutocompleteProps<T>) {
   const {
     searchValue,
     onChangeSearchValue,
-    selectedValue,
     onSelectValue,
     renderItem,
     isLoading,

@@ -16,7 +16,7 @@ export type AutocompleteProps<T extends Record<string, unknown>, TKey extends ke
   searchFn: (searchTerm: string, pageNumber: number) => Promise<AutocompletePayload<T>>;
   renderItem: (item: T) => React.ReactNode;
   itemKey: TKey;
-  defaultSelectedValue?: T[TKey];
+
   onSelectValue?: (itemKey: TKey, itemValue: T) => void;
 };
 
@@ -24,7 +24,6 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
   searchFn,
   renderItem,
   itemKey,
-  defaultSelectedValue,
   onSelectValue,
 }: AutocompleteProps<T, TKey>) {
 
@@ -35,14 +34,6 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Optionally pre-select the default value
-  useEffect(() => {
-    if (!defaultSelectedValue) return;
-    const foundIndex = items.findIndex(
-      (item) => item[itemKey] === defaultSelectedValue
-    );
-    if (foundIndex >= 0) setHighlightedIndex(foundIndex);
-  }, [items, defaultSelectedValue, itemKey]);
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
