@@ -27,7 +27,7 @@
     "next:build": "npm run build-storybook && next build",
     "next:start": "next start",
     "next:lint": "next lint",
-    "build": "rm -rf dist && tsc -p tsconfig.build.json && cp src/lib/Autocomplete_A/Autocomplete.css dist/lib/Autocomplete_A/ && cp src/lib/Autocomplete_B/Autocomplete.css dist/lib/Autocomplete_B/",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && cp src/lib/Autocomplete_A/Autocomplete.css dist/lib/Autocomplete_A/ && cp src/lib/Autocomplete_B/Autocomplete.css dist/lib/Autocomplete_B/ && cp src/lib/SpecialButton/special-button.css dist/lib/SpecialButton/",
     "prepublishOnly": "npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && cp -r storybook-static public",
