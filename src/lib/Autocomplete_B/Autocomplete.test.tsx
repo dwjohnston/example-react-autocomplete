@@ -64,6 +64,7 @@ describe('Autocomplete', () => {
                     renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
+                    selectedValueDisplayStringFn={(item: TestItem) => item.name}
                 />
             );
 
@@ -118,6 +119,7 @@ describe('Autocomplete', () => {
                     renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
+                    selectedValueDisplayStringFn={(item: TestItem) => item.name}
                 />
             );
 
@@ -166,6 +168,7 @@ describe('Autocomplete', () => {
                     renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={vi.fn()}
+                    selectedValueDisplayStringFn={(item: TestItem) => item.name}
                 />
             );
 
@@ -206,7 +209,7 @@ describe('Autocomplete', () => {
                     renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={onSelectValue}
-                    valuePrettyNameFn={(item: TestItem) => item.name}
+                    selectedValueDisplayStringFn={(item: TestItem) => item.name}
                 />
             );
 

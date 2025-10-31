@@ -34,23 +34,28 @@ type Story = StoryObj<typeof meta>;
 const todos = [
     {
         id: "1",
-        name: "Foo"
+        name: "Foo",
+        description: "This is foo"
     },
     {
         id: "2",
-        name: "Food"
+        name: "Food",
+        description: "This is food"
     },
     {
         id: "3",
-        name: "Bar"
+        name: "Bar",
+        description: "This is bar"
     },
     {
         id: "4",
-        name: "Nice Long text"
+        name: "Nice Long text",
+        description: "This is nice long text"
     },
     {
         id: "5",
-        name: "Nice long text two three four"
+        name: "Nice long text two three four",
+        description: "This is nice long text two three four"
     },
 
 ]
@@ -59,6 +64,7 @@ const todos = [
 type Todo = {
     id: string;
     name: string;
+    description: string;
 }
 
 async function searchFn(searchTerm: string, pageNumber: number) {
@@ -92,7 +98,7 @@ export const Main: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
-        valuePrettyNameFn: (item: Todo) => item.name,
+        selectedValueDisplayStringFn: (item: Todo) => item.name,
 
     },
     parameters: {
@@ -106,10 +112,9 @@ export function Interactive() {
         <div>
             <Autocomplete
                 searchFn={searchFn}
-                renderItem={(item) => <div>{item.name}</div>}
+                renderItem={(item) => <div>{item.name} - {item.description}</div>}
                 itemKey="id"
-                valuePrettyNameFn={(item) => item.name}
-
+                selectedValueDisplayStringFn={(item) => item.name}
             />
         </div>
     );
@@ -123,7 +128,7 @@ export const TestUserSearchesWithNoResults: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
-        valuePrettyNameFn: (item: Todo) => item.name,
+        selectedValueDisplayStringFn: (item: Todo) => item.name,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -158,7 +163,7 @@ export const TestUserSearchesWithResultsThenNoResults: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
-        valuePrettyNameFn: (item: Todo) => item.name,
+        selectedValueDisplayStringFn: (item: Todo) => item.name,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
