@@ -43,7 +43,16 @@ const todos = [
     {
         id: "3",
         name: "Bar"
-    }
+    },
+    {
+        id: "4",
+        name: "Nice Long text"
+    },
+    {
+        id: "5",
+        name: "Nice long text two three four"
+    },
+
 ]
 
 
@@ -60,7 +69,7 @@ async function searchFn(searchTerm: string, pageNumber: number) {
         result = [];
     }
     else {
-        result = todos.filter((v) => v.name.startsWith(searchTerm));
+        result = todos.filter((v) => v.name.toUpperCase().trim().startsWith(searchTerm.toUpperCase().trim()));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -83,6 +92,7 @@ export const Main: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
+        valuePrettyNameFn: (item: Todo) => item.name,
 
     },
     parameters: {
@@ -98,6 +108,7 @@ export function Interactive() {
                 searchFn={searchFn}
                 renderItem={(item) => <div>{item.name}</div>}
                 itemKey="id"
+                valuePrettyNameFn={(item) => item.name}
 
             />
         </div>
@@ -112,6 +123,7 @@ export const TestUserSearchesWithNoResults: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
+        valuePrettyNameFn: (item: Todo) => item.name,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -146,6 +158,7 @@ export const TestUserSearchesWithResultsThenNoResults: Story = {
             return <div>{v.name}</div>
         },
         itemKey: "id",
+        valuePrettyNameFn: (item: Todo) => item.name,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);

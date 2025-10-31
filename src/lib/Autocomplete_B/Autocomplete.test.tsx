@@ -206,6 +206,7 @@ describe('Autocomplete', () => {
                     renderItem={(item: TestItem) => <div>{item.name} - {item.description}</div>}
                     itemKey="id"
                     onSelectValue={onSelectValue}
+                    valuePrettyNameFn={(item: TestItem) => item.name}
                 />
             );
 
@@ -218,12 +219,19 @@ describe('Autocomplete', () => {
                 expect(screen.getByText('Apple - A red fruit')).toBeInTheDocument();
             });
 
+            expect(screen.getByRole("list")).toBeInTheDocument();
+
             // Navigate to first item and select with Enter
             await user.keyboard('{ArrowDown}');
             await user.keyboard('{Enter}');
 
             // Verify selection
             expect(onSelectValue).toHaveBeenCalledWith('id', mockItems[0]);
+
+            await waitFor(() => {
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+            });
+            expect((input as HTMLInputElement).value).toBe('Apple');
         });
     });
 

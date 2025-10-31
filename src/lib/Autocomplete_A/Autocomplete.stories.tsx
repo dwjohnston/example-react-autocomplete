@@ -45,10 +45,12 @@ async function searchFn(searchTerm: string, pageNumber: number) {
         result = [];
     }
     else {
-        result = todos.filter((v) => v.name.startsWith(searchTerm));
+        result = todos.filter((v) => v.name.toUpperCase().trim().startsWith(searchTerm.toUpperCase().trim()));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 500));
+
+    console.log(result)
 
     return {
         items: result,
@@ -70,10 +72,6 @@ export function Interactive() {
     const [availableOptions, setAvailableOptions] = React.useState<Array<Todo>>([]);
     const [isLoading, setIsLoading] = React.useState(false);
 
-    React.useEffect(() => {
-
-    }, [searchValue]);
-
     return <div>
         <pre>
             {JSON.stringify({ selectedValue, searchValue }, null, 2)}
@@ -82,13 +80,14 @@ export function Interactive() {
             searchValue={searchValue}
             onChangeSearchValue={async (str) => {
                 setSearchValue(str);
-                if (searchValue.length < 3) {
+                if (str.length < 3) {
                     setAvailableOptions([]);
                     return;
                 }
                 setIsLoading(true);
                 try {
-                    const result = await searchFn(searchValue, 1);
+                    const result = await searchFn(str, 1);
+                    setAvailableOptions(result.items);
                 }
                 catch {
                     setAvailableOptions([]);

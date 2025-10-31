@@ -18,6 +18,13 @@ export type AutocompleteProps<T extends Record<string, unknown>, TKey extends ke
   itemKey: TKey;
 
   onSelectValue?: (itemKey: TKey, itemValue: T) => void;
+
+  /**
+   * When an item is selected, we need a pretty name to show in the input box
+   * @param item 
+   * @returns 
+   */
+  valuePrettyNameFn: (item: T) => string;
 };
 
 export function Autocomplete<T extends Record<string, unknown>, TKey extends keyof T>({
@@ -25,7 +32,10 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
   renderItem,
   itemKey,
   onSelectValue,
+  valuePrettyNameFn
 }: AutocompleteProps<T, TKey>) {
+
+
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [items, setItems] = useState<T[]>([]);
@@ -50,9 +60,11 @@ export function Autocomplete<T extends Record<string, unknown>, TKey extends key
 
   const handleItemSelect = (item: T, index: number) => {
     setHighlightedIndex(index);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
+
+    const prettyName = valuePrettyNameFn(item);
+    inputRef.current!.value = prettyName;
+    setSearchTerm("");
+    setItems([])
     onSelectValue?.(itemKey, item);
   };
 
